@@ -57,15 +57,23 @@ const posts = [
 ];
 
 
+
+
+
+
 let feed = '';
 posts.forEach((item) => {
-    let {content, media, author, likes, created} = item;
+    let {id, content, media, author, likes, created} = item;
+    let altImage;
+    if (author.image == null){
+        altImage = author.name.replace(/[a-z]/g, '');
+    }
     feed += 
     `<div class="post">
         <div class="post__header">
             <div class="post-meta">                    
                 <div class="post-meta__icon">
-                    <img class="profile-pic" src=${author.image} alt='${author.name}'>                    
+                    <img class="profile-pic" src=${author.image} alt='${altImage}'>                    
                 </div>
                 <div class="post-meta__data">
                     <div class="post-meta__author">${author.name}</div>
@@ -80,18 +88,54 @@ posts.forEach((item) => {
         <div class="post__footer">
             <div class="likes js-likes">
                 <div class="likes__cta">
-                    <a class="like-button  js-like-button" href="#" data-postid="1">
+                    <a class="like-button  js-like-button" href="#" data-postid="${id}">
                         <i class="like-button__icon fas fa-thumbs-up" aria-hidden="true"></i>
                         <span class="like-button__label">Mi Piace</span>
                     </a>
                 </div>
                 <div class="likes__counter">
-                    Piace a <b id="like-counter-1" class="js-likes-counter">${likes}</b> persone
+                    Piace a <b id="like-counter-${id}" class="js-likes-counter">${likes}</b> persone
                 </div>
             </div> 
         </div>            
     </div>`
+    
+    
+    
+    
+    /* likeButton.addEventListener('click', function(){
+        
+        likeButton.classList.toggle('red')
+        
+    }) */
 })
 
 const container = document.getElementById('container');
 container.innerHTML = feed;
+
+
+let likeButton = document.getElementsByClassName('js-like-button');
+let likesNumberState = true;
+
+for(let i=0; i<likeButton.length; i++){
+    likeButton[i].addEventListener('click', function(){
+        this.classList.toggle('red')
+        const postId = this.dataset.postid;
+        const likes = document.getElementById(`like-counter-${postId}`);
+        
+        let likesNumber = parseInt(likes.innerText)
+        
+        if(likesNumberState==true){
+            likesNumberState = false
+            likesNumber++;
+        } else{
+            likesNumberState = true
+            likesNumber--;
+        }
+        
+        likes.innerText = likesNumber
+    }
+)}
+
+
+
