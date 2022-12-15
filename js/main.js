@@ -115,7 +115,6 @@ container.innerHTML = feed;
 
 
 let likeButton = document.getElementsByClassName('js-like-button');
-let likesNumberState = true;
 
 for(let i=0; i<likeButton.length; i++){
     likeButton[i].addEventListener('click', function(){
@@ -125,11 +124,9 @@ for(let i=0; i<likeButton.length; i++){
         
         let likesNumber = parseInt(likes.innerText)
         
-        if(likesNumberState==true){
-            likesNumberState = false
+        if(this.classList.contains('red')){
             likesNumber++;
         } else{
-            likesNumberState = true
             likesNumber--;
         }
         
